@@ -24,7 +24,7 @@
 			"file": "game.lua",
 			"settings":
 			{
-				"buffer_size": 2129,
+				"buffer_size": 2392,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -33,7 +33,7 @@
 			"file": "skyline.lua",
 			"settings":
 			{
-				"buffer_size": 1253,
+				"buffer_size": 4067,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -42,7 +42,7 @@
 			"file": "skylinetemplates.lua",
 			"settings":
 			{
-				"buffer_size": 988,
+				"buffer_size": 2209,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -51,7 +51,8 @@
 			"file": "util.lua",
 			"settings":
 			{
-				"buffer_size": 1634,
+				"buffer_size": 1848,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		}
@@ -170,6 +171,19 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"amp",
+			"aSource",
+			"print(string.format(",
+			"math.sqrt(self.scale)",
+			"lastX",
+			"random",
+			"100",
+			"amp = 150,\n                    freq = 0.001",
+			"perlin",
+			"NoiseSource:new",
+			"noise = \"perlin\"",
+			"noise",
+			"newSkyline",
 			"self.sampleInterval * self.scale",
 			"configType",
 			"layers",
@@ -215,7 +229,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -254,7 +268,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2129,
+						"buffer_size": 2392,
 						"regions":
 						{
 						},
@@ -272,7 +286,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 450.0,
+						"translation.y": 540.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
@@ -284,15 +298,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1253,
+						"buffer_size": 4067,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								21,
-								21
+								3899,
+								3899
 							]
 						],
 						"settings":
@@ -301,10 +315,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1273.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -313,15 +327,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 988,
+						"buffer_size": 2209,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								339,
-								339
+								1194,
+								1194
 							]
 						],
 						"settings":
@@ -330,10 +344,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 405.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -342,15 +356,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1634,
+						"buffer_size": 1848,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1152,
+								1152
 							]
 						],
 						"settings":
@@ -360,7 +374,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 45.0,
+						"translation.y": 720.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,

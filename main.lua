@@ -23,9 +23,7 @@ function love.draw()
 end
 
 function love.mousepressed(x, y, button)
-    if button == 1 then
-        game:placeSkyline(y)
-    end
+    
 end
 
 function love.mousereleased(x, y, button)
@@ -33,9 +31,7 @@ function love.mousereleased(x, y, button)
 end
 
 function love.keypressed(key)
-    if key == "backspace" then
-        game:clearCanvas()
-    elseif key == "space" then
+    if key == "space" then
         game:generateScene()
     end
 end

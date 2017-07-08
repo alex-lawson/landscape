@@ -1,114 +1,88 @@
 util = require 'util'
+require 'noise'
 
 Skyline = {}
 
-function Skyline:new(config, seed, scale)
+function Skyline:new(config, seed, baseY, scale, color)
     local newSkyline = setmetatable(util.copy(config), {__index=Skyline})
 
+    newSkyline.baseY = baseY
     newSkyline.scale = scale
+    newSkyline.color = color
 
     newSkyline.rng = love.math.newRandomGenerator(seed or util.seedTime())
 
     newSkyline.noiseSource = makeNoiseSource(config.noiseConfig, newSkyline.rng)
 
+    newSkyline.sampledRange = {0, 0}
+    newSkyline.sampleCache = {}
+
     return newSkyline
 end
 
-function Skyline:draw(baseY)
+function Skyline:draw(xOffset)
+    love.graphics.setColor(unpack(self.color))
+
     local w, h = love.graphics.getWidth(), love.graphics.getHeight()
 
-    local y = baseY - self:sample(0)
-    local x = 0
+    local polys = self:buildPolys(xOffset, xOffset + w)
 
-    while x < w do
-        local interval
-        if type(self.sampleInterval) == "table" then
-            interval = util.lerp(self.rng:random(), self.sampleInterval) * self.scale
-        else
-            interval = self.sampleInterval * self.scale
+    for _, p in pairs(polys) do
+        love.graphics.polygon("fill", p)
+    end
+end
+
+
+-- TODO: this is a terrible method, should completely refactor
+function Skyline:buildPolys(minX, maxX)
+    -- initialize cache if needed
+    if #self.sampleCache == 0 then
+        table.insert(self.sampleCache, {0, self:sample(0)})
+    end
+
+    -- extend sample cache left past minX
+    while minX < self.sampledRange[1] do
+        local x = self.sampledRange[1] - self:interval()
+        table.insert(self.sampleCache, 1, {x, self:sample(x)})
+        self.sampledRange[1] = x
+    end
+
+    -- extend sample cache right past maxX
+    while maxX > self.sampledRange[2] do
+        local x = self.sampledRange[2] + self:interval()
+        table.insert(self.sampleCache, {x, self:sample(x)})
+        self.sampledRange[2] = x
+    end
+
+    -- create polys from samples
+    local h = love.graphics.getWidth(), love.graphics.getHeight()
+
+    local res = {}
+
+    local p1 = self.sampleCache[1]
+    for i = 2, #self.sampleCache do
+        local p2 = self.sampleCache[i]
+
+        if p1[1] < maxX and p2[1] > minX then
+            table.insert(res, {p1[1] - minX, h, p2[1] - minX, h, p2[1] - minX, p2[2], p1[1] - minX, p1[2]})
+        elseif p1[1] > maxX then
+            break
         end
 
-        local nextX = x + interval
-        local nextY = baseY - self:sample(nextX)
-
-        local verts = {x, h, nextX, h, nextX, nextY, x, y}
-        love.graphics.polygon("fill", verts)
-
-        x = nextX
-        y = nextY
+        p1 = p2
     end
+
+    return res
 end
 
 function Skyline:sample(x)
-    return self.noiseSource:sample(x) * self.scale
+    return self.baseY + self.noiseSource:sample(x) * self.scale
 end
 
-function makeNoiseSource(config, rng)
-    local newNoise = util.copy(config)
-
-    newNoise.rng = rng
-
-    if config.noiseType == "rand" then
-        newNoise.sample = function(self, x)
-            return util.lerp(rng:random(), self.range)
-        end
-    elseif config.noiseType == "nrand" then
-        newNoise.sample = function(self, x)
-            return rng:randomNormal(self.stdev, self.mean or 0)
-        end
-    elseif config.noiseType == "perlin" then
-        newNoise.noiseOrigin = 100000 * rng:random()
-
-        newNoise.sample = function(self, x)
-            local sampleX = self.noiseOrigin + x * self.freq
-            return love.math.noise(sampleX) * self.amp
-        end
-    elseif config.noiseType == "sum" then
-        newNoise.sources = {}
-        for _, sourceConfig in ipairs(config.sources) do
-            table.insert(newNoise.sources, makeNoiseSource(sourceConfig, rng))
-        end
-
-        newNoise.sample = function(self, x)
-            local r = 0
-
-            for _, source in ipairs(self.sources) do
-                r = r + source:sample(x)
-            end
-
-            return r
-        end
-    elseif config.noiseType == "min" then
-        newNoise.sources = {}
-        for _, sourceConfig in ipairs(config.sources) do
-            table.insert(newNoise.sources, makeNoiseSource(sourceConfig, rng))
-        end
-
-        newNoise.sample = function(self, x)
-            local r
-
-            for _, source in ipairs(self.sources) do
-                r = r and math.min(r, source:sample(x)) or source:sample(x)
-            end
-
-            return r
-        end
-    elseif config.noiseType == "max" then
-        newNoise.sources = {}
-        for _, sourceConfig in ipairs(config.sources) do
-            table.insert(newNoise.sources, makeNoiseSource(sourceConfig, rng))
-        end
-
-        newNoise.sample = function(self, x)
-            local r
-
-            for _, source in ipairs(self.sources) do
-                r = r and math.max(r, source:sample(x)) or source:sample(x)
-            end
-
-            return r
-        end
+function Skyline:interval()
+    if type(self.sampleInterval) == "table" then
+        return util.lerp(self.rng:random(), self.sampleInterval) * self.scale
+    else
+        return self.sampleInterval * self.scale
     end
-
-    return newNoise
 end

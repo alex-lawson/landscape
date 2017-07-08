@@ -37,19 +37,61 @@ SkylineTemplates = {
         sampleInterval = {70, 100},
         yRange = {0.1, 0.4}
     },
+    Mesas = {
+        noiseConfig = {
+            noiseType = "select",
+            selectSource = {
+                noiseType = "perlin",
+                freq = 0.003
+            },
+            aSource = {
+                noiseType = "select",
+                selectSource = {
+                    noiseType = "perlin",
+                    freq = 0.005
+                },
+                aSource = {
+                    noiseType = "rand",
+                    range = {40, 45}
+                },
+                bSource = {
+                    noiseType = "rand",
+                    range = {50, 55}
+                }
+            },
+            bSource = {
+                noiseType = "min",
+                sources = {
+                    {
+                        noiseType = "perlin",
+                        amp = 10,
+                        freq = 0.008
+                    },
+                    {
+                        noiseType = "perlin",
+                        amp = 5,
+                        freq = 0.007
+                    }
+                }
+            }
+        },
+        sampleInterval = {10, 20},
+        yRange = {0.1, 0.5}
+    },
     Hills = {
         noiseConfig = {
             noiseType = "sum",
             sources = {
                 {
                     noiseType = "perlin",
-                    amp = 50,
+                    amp = 20,
                     freq = 0.005
                 },
                 {
                     noiseType = "perlin",
-                    amp = 30,
-                    freq = 0.005
+                    amp = 10,
+                    freq = 0.01,
+                    offset = 15
                 }
             }
         },
@@ -58,17 +100,18 @@ SkylineTemplates = {
     },
     LowHills = {
         noiseConfig = {
-            noiseType = "sum",
+            noiseType = "max",
             sources = {
                 {
                     noiseType = "perlin",
-                    amp = 30,
+                    amp = 15,
                     freq = 0.008
                 },
                 {
                     noiseType = "perlin",
-                    amp = 20,
-                    freq = 0.007
+                    amp = 10,
+                    freq = 0.007,
+                    offset = 10
                 }
             }
         },

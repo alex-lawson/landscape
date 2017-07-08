@@ -11,17 +11,26 @@ function Game:new(config)
 end
 
 function Game:init()
-    self.canvas = love.graphics.newCanvas()
     self.rng = love.math.newRandomGenerator(util.seedTime())
+    self.baseYRatio = 0.2
+    self.scaleRange = {0.5, 1.5}
+    self.parallaxRange = {3, 80}
+    self.parallax = 0
+
+    self:generateScene()
 end
 
 function Game:update(dt)
-
+    self.parallax = self.parallax + dt
 end
 
 function Game:render()
-    love.graphics.setColor(255, 255, 255)
-    love.graphics.draw(self.canvas)
+    local h = love.graphics.getHeight()
+
+    for _, sl in ipairs(self.skylines) do
+        local px = self.parallax * util.lerp(math.sin(math.pi * 0.5 * (sl.baseY - h * self.baseYRatio) / h), self.parallaxRange)
+        sl:draw(px)
+    end
 end
 
 function Game:clearCanvas()
@@ -30,43 +39,28 @@ function Game:clearCanvas()
     love.graphics.setCanvas()
 end
 
-function Game:placeSkyline(yPosition)
-    love.graphics.setCanvas(self.canvas)
-
-    love.graphics.setColor(self.rng:random(1, 255), self.rng:random(1, 255), self.rng:random(1, 255))
-
-    local sl = Skyline:new(SkylineTemplates.Mountains, nil, 0.982373)
-    sl:draw(yPosition)
-
-    love.graphics.setCanvas()
-end
-
 function Game:generateScene()
-    love.graphics.setCanvas(self.canvas)
-
-    love.graphics.clear()
+    self.parallax = 0
 
     local w, h = love.graphics.getWidth(), love.graphics.getHeight()
-    local baseY = h * 0.2
-    h = h - baseY
-
-    local scaleRange = {0.5, 1.5}
+    self.baseY = h * self.baseYRatio
+    h = h - self.baseY
 
     local function scaleFromY(fromY)
-        return util.lerp(math.sin(fromY / h * 0.5 * math.pi), scaleRange)
+        return util.lerp(math.sin(fromY / h * 0.5 * math.pi), self.scaleRange)
     end
 
-    local layerCount = self.rng:random(4, 7)
+    local layerCount = self.rng:random(6, 8)
 
     local function colorVal(i)
         local lerpVal = 1 - (i / layerCount - self.rng:random() * (1 / layerCount))
         return math.floor(255 * lerpVal)
     end
 
+    self.skylines = {}
+
     for i = 1, layerCount do
         local y = h - h * math.cos(i / layerCount * 0.4 * math.pi + self.rng:random() * 0.1)
-
-        love.graphics.setColor(colorVal(i), colorVal(i), colorVal(i))
 
         local candidates = {}
         local yRatio = y / h
@@ -83,12 +77,11 @@ function Game:generateScene()
 
         local template = candidates[self.rng:random(1, #candidates)]
 
-        printf("layer %s is type %s with scale %s", i, template, scaleFromY(y))
+        -- printf("layer %s is type %s with scale %s", i, template, scaleFromY(y))
 
-        local sl = Skyline:new(SkylineTemplates[template], self.rng:random(2147483647), scaleFromY(y))
-        sl:draw(baseY + y)
+        local color = {colorVal(i), colorVal(i), colorVal(i)}
+
+        local sl = Skyline:new(SkylineTemplates[template], self.rng:random(2147483647), self.baseY + y, scaleFromY(y), color)
+        table.insert(self.skylines, sl)
     end
-
-
-    love.graphics.setCanvas()
 end
