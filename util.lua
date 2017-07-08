@@ -61,9 +61,22 @@ local function range(a, b, step)
   return f, nil, a - step
 end
 
+local function lerp(r, a, b)
+  if type(a) == "table" then
+    return r * (a[2] - a[1]) + a[1]
+  else
+    return r * (b - a) + a
+  end
+end
+
+function printf(s, ...)
+  print(string.format(s, ...))
+end
+
 return {
   printTable = printTable,
   range = range,
   copy = copy,
-  seedTime = seedTime
+  seedTime = seedTime,
+  lerp = lerp
 }

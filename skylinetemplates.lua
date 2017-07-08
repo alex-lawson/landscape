@@ -1,47 +1,78 @@
 SkylineTemplates = {
     Mountains = {
-        noiseLayers = {
-            {
-                noise = "perlin",
-                amp = 300,
-                freq = 0.001
-            },
-            {
-                noise = "perlin",
-                amp = 200,
-                freq = 0.002
+        noiseConfig = { 
+            noiseType = "min",
+            sources = {
+                {
+                    noiseType = "rand",
+                    range = {-20, 90}
+                },
+                {
+                    noiseType = "rand",
+                    range = {-20, 90}
+                }
             }
         },
-        sampleInterval = 100
+        sampleInterval = {50, 100},
+        yRange = {0, 0.2}
+    },
+    LowMountains = {
+        noiseConfig = {
+            noiseType = "min",
+            sources = {
+                {
+                    noiseType = "rand",
+                    range = {-10, 50}
+                },
+                {
+                    noiseType = "rand",
+                    range = {-10, 50}
+                },
+                {
+                    noiseType = "rand",
+                    range = {-10, 50}
+                }
+            }
+        },
+        sampleInterval = {70, 100},
+        yRange = {0.1, 0.4}
     },
     Hills = {
-        noiseLayers = {
-            {
-                noise = "perlin",
-                amp = 50,
-                freq = 0.005
-            },
-            {
-                noise = "perlin",
-                amp = 30,
-                freq = 0.005
+        noiseConfig = {
+            noiseType = "sum",
+            sources = {
+                {
+                    noiseType = "perlin",
+                    amp = 50,
+                    freq = 0.005
+                },
+                {
+                    noiseType = "perlin",
+                    amp = 30,
+                    freq = 0.005
+                }
             }
         },
-        sampleInterval = 10
+        sampleInterval = 10,
+        yRange = {0.3, 0.9}
     },
     LowHills = {
-        noiseLayers = {
-            {
-                noise = "perlin",
-                amp = 30,
-                freq = 0.008
-            },
-            {
-                noise = "perlin",
-                amp = 20,
-                freq = 0.007
+        noiseConfig = {
+            noiseType = "sum",
+            sources = {
+                {
+                    noiseType = "perlin",
+                    amp = 30,
+                    freq = 0.008
+                },
+                {
+                    noiseType = "perlin",
+                    amp = 20,
+                    freq = 0.007
+                }
             }
         },
-        sampleInterval = 10
+        sampleInterval = 10,
+        yRange = {0.6, 1.0}
     }
 }

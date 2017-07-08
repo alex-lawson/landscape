@@ -50,8 +50,10 @@ function Game:generateScene()
     local baseY = h * 0.2
     h = h - baseY
 
+    local scaleRange = {0.5, 1.5}
+
     local function scaleFromY(fromY)
-        return math.max(0.1111111, math.sin(fromY / h * 0.5 * math.pi) ^ 1.5)
+        return util.lerp(math.sin(fromY / h * 0.5 * math.pi), scaleRange)
     end
 
     local layerCount = self.rng:random(4, 7)
@@ -66,16 +68,22 @@ function Game:generateScene()
 
         love.graphics.setColor(colorVal(i), colorVal(i), colorVal(i))
 
-        local template
-        if y < 0.2 * h then
-            template = "Mountains"
-        elseif y < 0.65 * h then
-            template = "Hills"
-        else
-            template = "LowHills"
+        local candidates = {}
+        local yRatio = y / h
+        for k, v in pairs(SkylineTemplates) do
+            if yRatio >= v.yRange[1] and yRatio <= v.yRange[2] then
+                table.insert(candidates, k)
+            end
         end
 
-        print(string.format("layer %s is type %s with scale %s", i, template, scaleFromY(y)))
+        if #candidates == 0 then
+            printf("no candidate templates found for yRatio %.2f", yRatio)
+            break
+        end
+
+        local template = candidates[self.rng:random(1, #candidates)]
+
+        printf("layer %s is type %s with scale %s", i, template, scaleFromY(y))
 
         local sl = Skyline:new(SkylineTemplates[template], self.rng:random(2147483647), scaleFromY(y))
         sl:draw(baseY + y)
