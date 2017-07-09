@@ -15,13 +15,14 @@ function Game:init()
     self.baseYRatio = 0.2
     self.scaleRange = {0.5, 1.5}
     self.parallaxRange = {3, 80}
+    self.parallaxRate = 1
     self.parallax = 0
 
     self:generateScene()
 end
 
 function Game:update(dt)
-    self.parallax = self.parallax + dt
+    self.parallax = self.parallax + self.parallaxRate * dt
 end
 
 function Game:render()
@@ -33,6 +34,14 @@ function Game:render()
     end
 end
 
+function Game:setParallaxRate(value)
+   self.parallaxRate = value
+end
+
+function Game:adjustParallaxRate(amount)
+    self.parallaxRate = self.parallaxRate + amount
+end
+
 function Game:clearCanvas()
     love.graphics.setCanvas(self.canvas)
     love.graphics.clear()
@@ -40,6 +49,7 @@ function Game:clearCanvas()
 end
 
 function Game:generateScene()
+    self:setParallaxRate(1)
     self.parallax = 0
 
     local w, h = love.graphics.getWidth(), love.graphics.getHeight()

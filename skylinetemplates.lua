@@ -1,6 +1,6 @@
 SkylineTemplates = {
     Mountains = {
-        noiseConfig = { 
+        noiseConfig = {
             noiseType = "min",
             sources = {
                 {
@@ -42,7 +42,8 @@ SkylineTemplates = {
             noiseType = "select",
             selectSource = {
                 noiseType = "perlin",
-                freq = 0.003
+                freq = 0.003,
+                offset = -0.2
             },
             aSource = {
                 noiseType = "select",
@@ -64,18 +65,19 @@ SkylineTemplates = {
                 sources = {
                     {
                         noiseType = "perlin",
-                        amp = 10,
-                        freq = 0.008
+                        amp = 40,
+                        freq = 0.001
                     },
                     {
                         noiseType = "perlin",
                         amp = 5,
-                        freq = 0.007
+                        freq = 0.007,
+                        offset = -15
                     }
                 }
             }
         },
-        sampleInterval = {10, 20},
+        sampleInterval = {5, 15},
         yRange = {0.1, 0.5}
     },
     Hills = {

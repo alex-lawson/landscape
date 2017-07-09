@@ -76,7 +76,7 @@ function Skyline:buildPolys(minX, maxX)
 end
 
 function Skyline:sample(x)
-    return self.baseY + self.noiseSource:sample(x) * self.scale
+    return self.baseY - self.noiseSource:sample(x) * self.scale
 end
 
 function Skyline:interval()

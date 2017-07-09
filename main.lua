@@ -20,10 +20,15 @@ end
 
 function love.draw()
     game:render()
+
+    if game.skylines and #game.skylines > 0 then
+        love.graphics.setColor(255, 255, 255)
+        love.graphics.print(string.format("Bottom layer cache size: %d", #game.skylines[#game.skylines].sampleCache), 10, 5)
+    end
 end
 
 function love.mousepressed(x, y, button)
-    
+
 end
 
 function love.mousereleased(x, y, button)
@@ -31,8 +36,13 @@ function love.mousereleased(x, y, button)
 end
 
 function love.keypressed(key)
+    local shifting = love.keyboard.isDown("rshift") or love.keyboard.isDown("lshift")
     if key == "space" then
         game:generateScene()
+    elseif key == "right" then
+        game:adjustParallaxRate(shifting and 100 or 1)
+    elseif key == "left" then
+        game:adjustParallaxRate(shifting and -100 or -1)
     end
 end
 
