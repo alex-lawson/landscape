@@ -22,7 +22,7 @@ function love.draw()
     game:render()
 
     if game.skylines and #game.skylines > 0 then
-        love.graphics.setColor(255, 255, 255)
+        love.graphics.setColor(1, 1, 1)
         love.graphics.print(string.format("Bottom layer cache size: %d", #game.skylines[#game.skylines].sampleCache), 10, 5)
     end
 end

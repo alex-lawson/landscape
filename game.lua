@@ -63,8 +63,7 @@ function Game:generateScene()
     local layerCount = self.rng:random(6, 8)
 
     local function colorVal(i)
-        local lerpVal = 1 - (i / layerCount - self.rng:random() * (1 / layerCount))
-        return math.floor(255 * lerpVal)
+        return 1 - (i / layerCount - self.rng:random() * (1 / layerCount))
     end
 
     self.skylines = {}
